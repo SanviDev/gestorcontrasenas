@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_de_contrasenas/widget/list.dart';
+import 'package:gestor_de_contrasenas/widget/new_account.dart';
 
 class ListAccounts extends StatelessWidget {
   const ListAccounts({super.key});
@@ -26,13 +27,32 @@ class ListAccounts extends StatelessWidget {
           ),
         ],
       ),
-      body: ListWidget(),
+      body: const ListWidget(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
-        onPressed: (
-          //* FUNCIONALIDAD PARA AGREGAR CUENTAS
-        ) {},
-        child: Icon(
+        onPressed: () {
+          // Crear los controladores antes de pasarlos
+          final nController = TextEditingController();
+          final uController = TextEditingController();
+          final pController = TextEditingController();
+          final eController = TextEditingController();
+          final tController = TextEditingController();
+
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (context) {
+              return ShowModalNewApp(
+                nCont: nController,
+                uCont: uController,
+                pCont: pController,
+                eCont: eController,
+                tCont: tController,
+              );
+            },
+          );
+        },
+        child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
