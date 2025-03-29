@@ -5,12 +5,10 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) =>
-          AccountProvider()..loadAccounts(), // Cargar cuentas al inicio
-      child: const MyApp(),
-    ),
-  );
+    MultiProvider(providers: [ChangeNotifierProvider(create: (_) => AccountProvider())],
+    child: MyApp(),),
+    
+    );
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +27,7 @@ class MyApp extends StatelessWidget {
       
     );
   }
-}
+} 
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});

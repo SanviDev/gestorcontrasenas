@@ -9,46 +9,54 @@ class AccountProvider extends ChangeNotifier {
 
   List<Account> get accounts => _accounts;
 
-  void addAccount(
-      String name,String username, String password, String email, String phone) {
-    _accounts.add(Account(
-
-        name: name,user: username, password: password, email: email, phone: phone));
-    saveAccounts(); // Guardar automáticamente al agregar
-    notifyListeners();
+  Future<File> _getFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File("${directory.path}/accounts.json");
   }
 
   /// Cargar cuentas desde el archivo JSON
   Future<void> loadAccounts() async {
     try {
-      final Directory appDocumentsDir =
-          await getApplicationDocumentsDirectory();
-      final File file = File('${appDocumentsDir.path}/accounts.json');
-
-      if (await file.exists()) {
-        String content = await file.readAsString();
-        List<dynamic> jsonList = jsonDecode(content);
-
-        _accounts = jsonList.map((json) => Account.fromJson(json)).toList();
+      final file = await _getFile();
+      if (!await file.exists()) {
+        debugPrint("Archivo JSON no encontrado, iniciando lista vacía.");
+        return;
+      }
+      final data = await file.readAsString();
+      if (data.isNotEmpty) {
+        final List<dynamic> jsonData = jsonDecode(data);
+        _accounts = jsonData.map((t) => Account.fromJson(t)).toList();
         notifyListeners();
       }
     } catch (e) {
-      print("Error al cargar cuentas: $e");
+      debugPrint("Error al cargar datos: $e");
     }
+  }
+
+  /// Agregar una cuenta sin sobrescribir la lista
+  Future<void> addAccount(String name, String username, String password,
+      String email, String phone) async {
+    await loadAccounts(); // Cargar las cuentas antes de modificar la lista
+
+    _accounts.add(Account(
+        name: name,
+        user: username,
+        password: password,
+        email: email,
+        phone: phone));
+
+    saveAccounts(); // Guardar automáticamente al agregar
   }
 
   /// Guardar cuentas en un archivo JSON
   Future<void> saveAccounts() async {
     try {
-      final Directory appDocumentsDir =
-          await getApplicationDocumentsDirectory();
-      final File file = File('${appDocumentsDir.path}/accounts.json');
-
-      String jsonContent =
-          jsonEncode(_accounts.map((a) => a.toJson()).toList());
-      await file.writeAsString(jsonContent);
+      final file = await _getFile();
+      final data = jsonEncode(_accounts.map((a) => a.toJson()).toList());
+      await file.writeAsString(data);
     } catch (e) {
-      print("Error al guardar cuentas: $e");
+      debugPrint("Error al guardar datos: $e");
     }
+    notifyListeners();
   }
 }

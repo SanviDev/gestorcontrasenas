@@ -53,7 +53,6 @@ class ShowModalNewApp extends StatelessWidget {
           const SizedBox(height: 15),
           TextField(
             controller: pCont,
-            obscureText: true,
             decoration: const InputDecoration(
               labelText: 'Contraseña',
               border: OutlineInputBorder(),
@@ -107,8 +106,7 @@ class ShowModalNewApp extends StatelessWidget {
                     ],
                   ),
                 );
-              }
-
+              }else {
               final Account newAccount = Account(
                   name: nCont.text,
                   user: uCont.text,
@@ -118,6 +116,8 @@ class ShowModalNewApp extends StatelessWidget {
               AccountProvider().addAccount(newAccount.name, newAccount.user,
                   newAccount.password, newAccount.email, newAccount.phone);
               Navigator.pop(context);
+              }
+
             },
             child: const Text('Guardar'),
           ),

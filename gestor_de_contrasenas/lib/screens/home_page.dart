@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gestor_de_contrasenas/widget/list.dart';
 import 'package:gestor_de_contrasenas/widget/new_account.dart';
 
-class ListAccounts extends StatelessWidget {
+class ListAccounts extends StatefulWidget {
   const ListAccounts({super.key});
 
+  @override
+  State<ListAccounts> createState() => _ListAccountsState();
+}
+
+class _ListAccountsState extends State<ListAccounts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,21 +22,19 @@ class ListAccounts extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            icon: const Icon(Icons.menu, color: Colors.white),
+            onPressed: () {},
           ),
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.white,),
+            onPressed:(){}, 
+            ),
         ],
       ),
-      body: const ListWidget(),
+      body: ListWidget(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
         onPressed: () {
-          // Crear los controladores antes de pasarlos
           final nController = TextEditingController();
           final uController = TextEditingController();
           final pController = TextEditingController();
@@ -52,10 +55,7 @@ class ListAccounts extends StatelessWidget {
             },
           );
         },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
